@@ -47,6 +47,7 @@ class Path extends Phaser.Scene {
 
         // TODO:
         //  - set the run mode flag to false (after implenting run mode)
+        this.runMode = false;
 
         // Create enemyShip as a follower type of sprite
         // Call startFollow() on enemyShip to have it follow the curve
@@ -95,8 +96,9 @@ class Path extends Phaser.Scene {
             //   If run mode is active, then don't call clearPoints()
             //   (i.e., can only clear points when not in run mode)
 
-            this.clearPoints();
-
+            if (this.runMode === false) {
+                this.clearPoints();
+            }
         }
 
 
@@ -104,17 +106,13 @@ class Path extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(this.oKey)) {
             console.log("Output the points");
 
-            // TODO:
-            // * Print out the points comprising the line
-            //   use a "for ... of" loop to iterate through the
-            //   elements of this.curve.points 
-            //
-            // Format them in the form of an array, so you can copy/paste into
-            // your gallery shooter game:
-            // [
-            //  point0.x, point0.y,
-            //  point1.x, point1.y
-            // ]
+            let formattedPoints = [];
+
+            for (let point of this.curve.points) {
+                formattedPoints.push(point.x, point.y);
+            }
+
+            console.log(formattedPoints);
         }   
 
         if (Phaser.Input.Keyboard.JustDown(this.rKey)) {
@@ -149,6 +147,38 @@ class Path extends Phaser.Scene {
             //     rotateToPath: true,
             //     rotationOffset: -90
             // }
+
+            if (this.runMode === true) {
+                my.sprite.enemyShip.stopFollow();
+                my.sprite.enemyShip.visible = false;
+                this.runMode = false;
+            } else {
+
+                // ensuring isn't empty
+                if (this.curve.points.length > 0) {
+                    this.runMode = true;
+                    const firstPoint = this.curve.points[0];
+
+                    // set enemy ship cords
+                    my.sprite.enemyShip.x = firstPoint.x;
+                    my.sprite.enemyShip.y = firstPoint.y;
+
+                    my.sprite.enemyShip.visible = true;
+
+                    // start follow
+                    my.sprite.enemyShip.startFollow({
+                        from: 0,
+                        to: 1,
+                        delay: 2,
+                        duration: 2000,
+                        ease: 'Sine.easeInOut',
+                        repeat: -1,
+                        yoyo: true,
+                        rotateToPath: true,
+                        rotationOffset: -90
+                        });
+                }
+            }
         }
 
     }
