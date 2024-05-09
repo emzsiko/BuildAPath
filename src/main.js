@@ -1,8 +1,8 @@
-// Jim Whitehead
-// Created: 4/14/2024
+// Em Ishida
+// Created: 5/3/2024
 // Phaser: 3.70.0
 //
-// Cubey
+// Gallery Shooter
 //
 // An example of putting sprites on the screen using Phaser
 // 
@@ -21,7 +21,7 @@ let config = {
     },
     width: 1000,
     height: 800,
-    scene: [Path]
+    scene: [Shooter]
 }
 
 // Global variable to hold sprites
