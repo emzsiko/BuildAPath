@@ -34,9 +34,16 @@ class Shooter extends Phaser.Scene {
         this.AKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-        // creating sprites
+        // creating player sprite
         my.sprite.cloud = new Cloud(this, game.config.width/2, game.config.height - 40, "cloud", null, this.DKey, this.AKey, 5);
         my.sprite.cloud.setScale(.4);
+
+        // enemy sprites (flies)
+        // move speed
+        this.flyMoveSpeed = 3;
+        this.fly1 = new Enemy(this, 1000, Phaser.Math.Between(50, 400), "fly", null, this.flyMoveSpeed, 10, 0);
+        this.fly2 = new Enemy(this, 1000, Phaser.Math.Between(50, 400), "fly", null, this.flyMoveSpeed, 10, 3000);
+        this.fly3 = new Enemy(this, 1000, Phaser.Math.Between(50, 400), "fly", null, this.flyMoveSpeed, 10, 5000);
 
         this.bulletSpeed = 6;
 
@@ -61,41 +68,11 @@ class Shooter extends Phaser.Scene {
             bullet.y -= this.bulletSpeed;
         }
 
-        // Remove all of the bullets which are offscreen
-        // filter() goes through all of the elements of the array, and
-        // only returns those which **pass** the provided test (conditional)
-        // In this case, the condition is, is the y value of the bullet
-        // greater than zero minus half the display height of the bullet? 
-        // (i.e., is the bullet fully offscreen to the top?)
-        // We store the array returned from filter() back into the bullet
-        // array, overwriting it. 
-        // This does have the impact of re-creating the bullet array on every 
-        // update() call. 
         my.sprite.bullet = my.sprite.bullet.filter((bullet) => bullet.y > -(bullet.displayHeight/2));
 
         my.sprite.cloud.update();
-
-    /*
-        // lightning bolt bullet
-        if(Phaser.Input.Keyboard.JustDown(this.spaceBar)) {
-            // creates sprite to emit
-            let emittedSprite = this.add.sprite(my.sprite.cloud.x, my.sprite.cloud.y, "lightning");
-            // add sprites to list
-            my.emittedSprites.push(emittedSprite);
-        }
-
-        // move upwards
-        for (let i = 0; i < my.emittedSprites.length; i++) {
-            let emittedSprite = my.emittedSprites[i];
-            emittedSprite.y -= 8;
-
-            // check if in bounds or not
-            if (emittedSprite.y < screenBounds.top) {
-                emittedSprite.destroy();
-                my.emittedSprites.splice(i, 1);
-                i--;
-            }
-        }
-        */
+        this.fly1.update();
+        this.fly2.update();
+        this.fly3.update();
     }
 }
