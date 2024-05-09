@@ -45,6 +45,9 @@ class Shooter extends Phaser.Scene {
         this.fly2 = new Enemy(this, 1000, Phaser.Math.Between(50, 400), "fly", null, this.flyMoveSpeed, 10, 3000);
         this.fly3 = new Enemy(this, 1000, Phaser.Math.Between(50, 400), "fly", null, this.flyMoveSpeed, 10, 5000);
 
+        // enemy array
+        this.enemies = [this.fly1, this.fly2, this.fly3];
+
         this.bulletSpeed = 6;
 
     }
@@ -62,17 +65,49 @@ class Shooter extends Phaser.Scene {
             }
         }
 
-    // Make all of the bullets move
+        my.sprite.bullet = my.sprite.bullet.filter((bullet) => bullet.y > -(bullet.displayHeight/2));
+
+        for (let bullet of my.sprite.bullet) {
+            for (let enemy of this.enemies) {
+                if (this.collides(enemy, bullet)) {
+                    // clear out bullet -- put y offscreen, will get reaped next update
+                    bullet.y = -100;
+                    enemy.visible = false;
+                    enemy.x = -100;
+                    /*
+                    // Update score
+                    this.myScore += my.sprite.hippo.scorePoints;
+                    this.updateScore();
+                    // Play sound
+                    this.sound.play("dadada", {
+                        volume: 1   // Can adjust volume using this, goes from 0 to 1
+                    });
+                    // Have new hippo appear after end of animation
+                    this.puff.on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
+                        this.my.sprite.hippo.visible = true;
+                        this.my.sprite.hippo.x = Math.random()*config.width;
+                    }, this);
+                    */
+                }
+            }
+        }
+
+        // make all of the bullets move
         for (let bullet of my.sprite.bullet) {
             bullet.setScale(0.3);
             bullet.y -= this.bulletSpeed;
         }
 
-        my.sprite.bullet = my.sprite.bullet.filter((bullet) => bullet.y > -(bullet.displayHeight/2));
-
         my.sprite.cloud.update();
         this.fly1.update();
         this.fly2.update();
         this.fly3.update();
+    }
+
+    // A center-radius AABB collision check
+    collides(a, b) {
+        if (Math.abs(a.x - b.x) > (a.displayWidth/2 + b.displayWidth/2)) return false;
+        if (Math.abs(a.y - b.y) > (a.displayHeight/2 + b.displayHeight/2)) return false;
+        return true;
     }
 }
