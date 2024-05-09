@@ -1,8 +1,11 @@
 class Shooter extends Phaser.Scene {
 
-    constructor(){
+    constructor() {
         super("galleryShooter");
         this.my = {sprite: {}, emittedSprites: []};
+
+        this.my.sprite.bullet = [];
+        this.maxBullets = 10;
     }
 
     preload() {
@@ -32,25 +35,47 @@ class Shooter extends Phaser.Scene {
         this.spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // creating sprites
-        //my.sprite.cloud = this.add.sprite(500, 600, "cloud");
-        my.sprite.cloud = new Cloud(this, game.config.width/2, 600, "cloud", null, this.DKey, this.AKey, 4);
-        my.sprite.cloud.setScale(.5);
+        my.sprite.cloud = new Cloud(this, game.config.width/2, game.config.height - 40, "cloud", null, this.DKey, this.AKey, 5);
+        my.sprite.cloud.setScale(.4);
+
+        this.bulletSpeed = 6;
 
     }
 
     update() {
         let my = this.my;    // create an alias to this.my for readability
 
-        // screen boundaries
-        const screenBounds = {
-            left: 0,
-            right: 1000,
-            top: 0,
-            bottom: 800
+       // check for bullet being fired
+       if (Phaser.Input.Keyboard.JustDown(this.spaceBar)) {
+            // are we under our bullet quota?
+            if (my.sprite.bullet.length < this.maxBullets) {
+                my.sprite.bullet.push(this.add.sprite(
+                    my.sprite.cloud.x, my.sprite.cloud.y-(my.sprite.cloud.displayHeight/2), "lightning")
+                );
+            }
         }
+
+    // Make all of the bullets move
+        for (let bullet of my.sprite.bullet) {
+            bullet.setScale(0.3);
+            bullet.y -= this.bulletSpeed;
+        }
+
+        // Remove all of the bullets which are offscreen
+        // filter() goes through all of the elements of the array, and
+        // only returns those which **pass** the provided test (conditional)
+        // In this case, the condition is, is the y value of the bullet
+        // greater than zero minus half the display height of the bullet? 
+        // (i.e., is the bullet fully offscreen to the top?)
+        // We store the array returned from filter() back into the bullet
+        // array, overwriting it. 
+        // This does have the impact of re-creating the bullet array on every 
+        // update() call. 
+        my.sprite.bullet = my.sprite.bullet.filter((bullet) => bullet.y > -(bullet.displayHeight/2));
 
         my.sprite.cloud.update();
 
+    /*
         // lightning bolt bullet
         if(Phaser.Input.Keyboard.JustDown(this.spaceBar)) {
             // creates sprite to emit
@@ -71,5 +96,6 @@ class Shooter extends Phaser.Scene {
                 i--;
             }
         }
+        */
     }
 }

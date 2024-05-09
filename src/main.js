@@ -20,7 +20,7 @@ let config = {
         pixelArt: true  // prevent pixel art from getting blurred when scaled
     },
     width: 1000,
-    height: 800,
+    height: 600,
     scene: [Shooter]
 }
 
