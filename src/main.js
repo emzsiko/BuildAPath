@@ -2,12 +2,19 @@
 // Created: 5/3/2024
 // Phaser: 3.70.0
 //
-// Gallery Shooter
+// Bolt Blaster (CMPM 120 Gallery Shooter Project)
 //
-// An example of putting sprites on the screen using Phaser
+// A shoot em up game made with Phaser
+//
+// Uses code borrowed from Jim Whitehead
 // 
-// Art assets from Kenny Assets "Shape Characters" set:
-// https://kenney.nl/assets/shape-characters
+// All assets from Kenny Assets:
+// Jumper Pack: https://kenney.nl/assets/jumper-pack
+// Platformer Art Extended Enemies: https://kenney.nl/assets/platformer-art-extended-enemies 
+// Simplified Platformer Pack: https://kenney.nl/assets/simplified-platformer-pack
+// Space Shooter Redux: https://kenney.nl/assets/space-shooter-redux
+// Impact Sounds: https://kenney.nl/assets/impact-sounds
+// Background Elements: https://kenney.nl/assets/background-elements 
 
 // debug with extreme prejudice
 "use strict"

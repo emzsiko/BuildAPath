@@ -39,14 +39,17 @@ class Controls extends Phaser.Scene {
         this.SKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
         let scoreConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#322671',
-            color: '#476ECC',
+            fontFamily: 'monospace',
+            fontSize: '25px',
+            fontStyle: 'italic',
+            backgroundColor: '#f1f1f1',
+            color: '#Ffc94f',
             align: 'center',
             padding: {
                 top: 5,
                 bottom: 5,
+                right: 5,
+                left: 5,
             },
         }
 

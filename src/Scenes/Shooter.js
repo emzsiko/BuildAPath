@@ -43,19 +43,21 @@ class Shooter extends Phaser.Scene {
 
         // display score
         let scoreConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#322671',
-            color: '#476ECC',
+            fontFamily: 'monospace',
+            fontSize: '20px',
+            fontStyle: 'italic',
+            backgroundColor: '#f1f1f1',
+            color: '#Ffc94f',
             align: 'right',
             padding: {
                 top: 5,
                 bottom: 5,
+                right: 5,
+                left: 5,
             },
-            fixedWidth: 100
         }
 
-        this.scoreLeft = this.add.text(this.score, scoreConfig);
+        this.scoreLeft = this.add.text(20, 20, "Score: " + score, scoreConfig);
 
         // Define key bindings
         this.DKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);

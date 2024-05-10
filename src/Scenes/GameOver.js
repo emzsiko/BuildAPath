@@ -19,20 +19,23 @@ class GameOver extends Phaser.Scene {
         this.RKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
         let scoreConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#322671',
-            color: '#476ECC',
+            fontFamily: 'monospace',
+            fontSize: '25px',
+            fontStyle: 'italic',
+            backgroundColor: '#f1f1f1',
+            color: '#Ffc94f',
             align: 'center',
             padding: {
                 top: 5,
                 bottom: 5,
+                right: 5,
+                left: 5,
             },
         }
 
-        this.add.text(game.config.width / 2, game.config.height / 2,"GAME OVER", scoreConfig).setOrigin(0.5);
-        this.add.text(game.config.width / 2, (game.config.height / 2) + 50, "Press 'R' to restart", scoreConfig).setOrigin(0.5);
-        this.add.text(game.config.width / 2, (game.config.height / 2) + 100, "Score: " + score, scoreConfig).setOrigin(0.5);
+        this.add.text(game.config.width / 2, (game.config.height / 2) - 50,"GAME OVER", scoreConfig).setOrigin(0.5);
+        this.add.text(game.config.width / 2, game.config.height / 2, "Press 'R' to restart", scoreConfig).setOrigin(0.5);
+        this.add.text(game.config.width / 2, (game.config.height / 2) + 50, "Score: " + score, scoreConfig).setOrigin(0.5);
     }
 
     update() {
