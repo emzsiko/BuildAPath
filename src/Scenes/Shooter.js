@@ -10,6 +10,7 @@ class Shooter extends Phaser.Scene {
         this.my.sprite.enemyBullet = [];
 
         this.score = 0;
+        this.playerHealth = 3;
     }
 
     preload() {
@@ -24,6 +25,11 @@ class Shooter extends Phaser.Scene {
         this.load.image("flame", "flame.png"); // enemy's bullet
         this.load.image("lightning", "lighting_yellow.png"); // player's lightning bolt
         this.load.image("heart", "platformPack_item017.png"); // heart icon
+
+        // audio
+        this.load.audio("bulletFire", "impactWood_medium_003.ogg");
+        this.load.audio("impact", "impactPunch_medium_000.ogg");
+        this.load.audio("enemyFire", "impactTin_medium_001.ogg");
 
     }
 
@@ -53,6 +59,11 @@ class Shooter extends Phaser.Scene {
         this.DKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.AKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        // setting health bar
+        my.sprite.heart1 = this.add.sprite(20, 580, "heart");
+        my.sprite.heart2 = this.add.sprite(50, 580, "heart");
+        my.sprite.heart3 = this.add.sprite(80, 580, "heart");
 
         // creating player sprite
         my.sprite.cloud = new Cloud(this, game.config.width/2, game.config.height - 40, "cloud", null, this.DKey, this.AKey, 5);
@@ -92,6 +103,8 @@ class Shooter extends Phaser.Scene {
 
         this.bulletSpeed = 6;
 
+        this.gameOver = false;
+
     }
 
     update() {
@@ -104,6 +117,11 @@ class Shooter extends Phaser.Scene {
                 my.sprite.bullet.push(this.add.sprite(
                     my.sprite.cloud.x, my.sprite.cloud.y-(my.sprite.cloud.displayHeight/2), "lightning")
                 );
+
+                // play sound
+                this.sound.play("bulletFire", {
+                    volume: 1   // Can adjust volume using this, goes from 0 to 1
+                });
             }
         }
 
@@ -119,17 +137,10 @@ class Shooter extends Phaser.Scene {
                     // update score
                     this.score += enemy.pointValue;
                     this.updateScore();
-                    /*
-                    // Play sound
-                    this.sound.play("dadada", {
+                    // play sound
+                    this.sound.play("impact", {
                         volume: 1   // Can adjust volume using this, goes from 0 to 1
                     });
-                    // Have new hippo appear after end of animation
-                    this.puff.on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
-                        this.my.sprite.hippo.visible = true;
-                        this.my.sprite.hippo.x = Math.random()*config.width;
-                    }, this);
-                    */
                 }
             }
         }
@@ -150,6 +161,11 @@ class Shooter extends Phaser.Scene {
                         aircraft.x, aircraft.y+(aircraft.displayHeight/2), "flame")
                     );
 
+                    // play sound
+                    this.sound.play("enemyFire", {
+                        volume: 1   // Can adjust volume using this, goes from 0 to 1
+                    });
+
                     // set timer
                     aircraft.shootTimer = this.time.now + 1000;
                 }
@@ -162,6 +178,31 @@ class Shooter extends Phaser.Scene {
     for (let bullet of my.sprite.enemyBullet) {
         bullet.setScale(0.3);
         bullet.y += this.bulletSpeed;
+    }
+
+    for (let bullet of my.sprite.enemyBullet) {
+        if (this.collides(my.sprite.cloud, bullet)) {
+            bullet.y = -100;
+            this.playerHealth -= 1;
+
+            // play sound
+            this.sound.play("impact", {
+                volume: 1   // Can adjust volume using this, goes from 0 to 1
+            });
+
+            if (this.playerHealth === 2) {
+                my.sprite.heart3.visible = false;
+            }
+
+            if (this.playerHealth === 1) {
+                my.sprite.heart2.visible = false;
+            }
+
+            if (this.playerHealth === 0) {
+                my.sprite.heart1.visible = false;
+                this.gameOver = true;
+            }
+        }
     }
 
         my.sprite.cloud.update();
