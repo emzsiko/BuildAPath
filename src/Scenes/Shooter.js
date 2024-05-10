@@ -32,30 +32,14 @@ class Shooter extends Phaser.Scene {
         this.load.audio("enemyFire", "impactTin_medium_001.ogg");
 
         // bg
-        this.load.image("cloud-bg", "bgElements_spritesheet.png"); // tile sheet   
-        this.load.tilemapTiledJSON("map", "GalleryShooterBG.json"); // Load JSON of tilemap
+        this.load.image("bg", "GalleryShooterBG.png");
 
     }
 
     create() {
         let my = this.my;
 
-        // generate map
-        this.map = this.add.tilemap("map", 20, 20, 50, 30);
-
-        // Add a tileset to the map
-        // First parameter: the name we gave to the tileset when it was added to Tiled
-        // Second parameter: the key for the tilesheet (from this.load.image above)
-        // https://photonstorm.github.io/phaser3-docs/Phaser.Tilemaps.Tilemap.html#addTilesetImage__anchor
-        this.tileset = this.map.addTilesetImage("bgElements_spritesheet", "cloud-bg");
-
-        // Create a tile map layer
-        // First parameter: name of the layer from Tiled
-        // https://newdocs.phaser.io/docs/3.54.0/Phaser.Tilemaps.Tilemap#createLayer
-        this.bglayer = this.map.createLayer("background", this.tileset, 0, 0);
-        this.clouds3 = this.map.createLayer("clouds3", this.tileset, 0, 0);
-        this.clouds2 = this.map.createLayer("clouds2", this.tileset, 0, 0);
-        this.clouds = this.map.createLayer("clouds", this.tileset, 0, 0);
+        this.cloudbg = this.add.tileSprite(0, 0, 1000, 600, 'bg').setOrigin(0, 0);
 
         // display score
         let scoreConfig = {
@@ -133,6 +117,8 @@ class Shooter extends Phaser.Scene {
 
     update() {
         let my = this.my;    // create an alias to this.my for readability
+
+        this.cloudbg.tilePositionX += 2.5;  // update tile sprite
 
        // check for bullet being fired
        if (Phaser.Input.Keyboard.JustDown(this.spaceBar)) {

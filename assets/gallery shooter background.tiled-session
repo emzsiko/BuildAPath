@@ -3,10 +3,21 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "GalleryShooterBG.json",
     "expandedProjectPaths": [
     ],
     "fileStates": {
+        "GalleryShooterBG.json": {
+            "scale": 0.7429,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 499.3942657154395,
+                "y": 300.17498990442857
+            }
+        },
+        "GalleryShooterBG.json#bgElements_spritesheet": {
+            "scaleInDock": 0.25
+        }
     },
     "last.imagePath": "C:/Users/eishi/OneDrive/Documents/GitHub/cmpm 120/cmpm 120 gallery shooter/assets",
     "map.height": 30,
@@ -15,9 +26,11 @@
     "map.tileWidth": 20,
     "map.width": 50,
     "openFiles": [
+        "GalleryShooterBG.json"
     ],
     "project": "gallery shooter background.tiled-project",
     "recentFiles": [
+        "GalleryShooterBG.json"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {

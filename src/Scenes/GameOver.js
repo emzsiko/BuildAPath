@@ -2,8 +2,18 @@ class GameOver extends Phaser.Scene {
     constructor() {
         super("gameOver");
     }
+
+    preload() {
+        this.load.setPath("./assets/"); // set load path
+
+        // bg
+        this.load.image("bg", "GalleryShooterBG.png");
+    }
   
     create() {
+
+        // bg
+        this.cloudbg = this.add.tileSprite(0, 0, 1000, 600, 'bg').setOrigin(0, 0);
 
         // key bindings
         this.RKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -27,6 +37,7 @@ class GameOver extends Phaser.Scene {
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(this.RKey)) {
+            score = 0;
             this.scene.start("galleryShooter");
         }
     }
