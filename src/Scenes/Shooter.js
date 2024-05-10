@@ -6,6 +6,8 @@ class Shooter extends Phaser.Scene {
 
         this.my.sprite.bullet = [];
         this.maxBullets = 10;
+
+        this.score = 0;
     }
 
     preload() {
@@ -25,6 +27,22 @@ class Shooter extends Phaser.Scene {
 
     create() {
         let my = this.my;
+
+        // display score
+        let scoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#322671',
+            color: '#476ECC',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100
+        }
+
+        this.scoreLeft = this.add.text(this.score, scoreConfig);
 
         // Define key bindings
         this.ESCKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
@@ -74,10 +92,10 @@ class Shooter extends Phaser.Scene {
                     bullet.y = -100;
                     enemy.visible = false;
                     enemy.x = -100;
-                    /*
-                    // Update score
-                    this.myScore += my.sprite.hippo.scorePoints;
+                    // update score
+                    this.score += enemy.pointValue;
                     this.updateScore();
+                    /*
                     // Play sound
                     this.sound.play("dadada", {
                         volume: 1   // Can adjust volume using this, goes from 0 to 1
@@ -109,5 +127,9 @@ class Shooter extends Phaser.Scene {
         if (Math.abs(a.x - b.x) > (a.displayWidth/2 + b.displayWidth/2)) return false;
         if (Math.abs(a.y - b.y) > (a.displayHeight/2 + b.displayHeight/2)) return false;
         return true;
+    }
+
+    updateScore() {
+        this.scoreLeft.text = "Score: " + this.score;
     }
 }
