@@ -53,9 +53,6 @@ class Shooter extends Phaser.Scene {
         this.scoreLeft = this.add.text(this.score, scoreConfig);
 
         // Define key bindings
-        this.ESCKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-        this.oKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
-        this.rKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         this.DKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.AKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -172,38 +169,43 @@ class Shooter extends Phaser.Scene {
             }
         }
 
-    my.sprite.enemyBullet = my.sprite.enemyBullet.filter((bullet) => bullet.y > -(bullet.displayHeight/2));
+        my.sprite.enemyBullet = my.sprite.enemyBullet.filter((bullet) => bullet.y > -(bullet.displayHeight/2));
 
-    // make all of the enemy bullets move
-    for (let bullet of my.sprite.enemyBullet) {
-        bullet.setScale(0.3);
-        bullet.y += this.bulletSpeed;
-    }
+        // make all of the enemy bullets move
+        for (let bullet of my.sprite.enemyBullet) {
+            bullet.setScale(0.3);
+            bullet.y += this.bulletSpeed;
+        }
 
-    for (let bullet of my.sprite.enemyBullet) {
-        if (this.collides(my.sprite.cloud, bullet)) {
-            bullet.y = -100;
-            this.playerHealth -= 1;
+        for (let bullet of my.sprite.enemyBullet) {
+            if (this.collides(my.sprite.cloud, bullet)) {
+                bullet.y = -100;
+                this.playerHealth -= 1;
 
-            // play sound
-            this.sound.play("impact", {
-                volume: 1   // Can adjust volume using this, goes from 0 to 1
-            });
+                // play sound
+                this.sound.play("impact", {
+                    volume: 1   // Can adjust volume using this, goes from 0 to 1
+                });
 
-            if (this.playerHealth === 2) {
-                my.sprite.heart3.visible = false;
-            }
+                if (this.playerHealth === 2) {
+                    my.sprite.heart3.visible = false;
+                }
 
-            if (this.playerHealth === 1) {
-                my.sprite.heart2.visible = false;
-            }
+                if (this.playerHealth === 1) {
+                    my.sprite.heart2.visible = false;
+                }
 
-            if (this.playerHealth === 0) {
-                my.sprite.heart1.visible = false;
-                this.gameOver = true;
+                if (this.playerHealth === 0) {
+                    my.sprite.heart1.visible = false;
+                    this.gameOver = true;
+                }
             }
         }
-    }
+
+        if (this.gameOver === true) {
+            console.log("game over: " + this.gameOver);
+            this.scene.start("gameOver");
+        }
 
         my.sprite.cloud.update();
         for (let enemy of this.enemies) {
