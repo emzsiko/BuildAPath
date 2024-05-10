@@ -26,5 +26,6 @@ let config = {
 
 // Global variable to hold sprites
 var my = {sprite: {}};
+let score = 0;
 
 const game = new Phaser.Game(config);

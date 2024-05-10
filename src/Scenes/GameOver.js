@@ -22,6 +22,7 @@ class GameOver extends Phaser.Scene {
 
         this.add.text(game.config.width / 2, game.config.height / 2,"GAME OVER", scoreConfig).setOrigin(0.5);
         this.add.text(game.config.width / 2, (game.config.height / 2) + 50, "Press 'R' to restart", scoreConfig).setOrigin(0.5);
+        this.add.text(game.config.width / 2, (game.config.height / 2) + 100, "Score: " + score, scoreConfig).setOrigin(0.5);
     }
 
     update() {

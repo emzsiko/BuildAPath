@@ -9,7 +9,6 @@ class Shooter extends Phaser.Scene {
 
         this.my.sprite.enemyBullet = [];
 
-        this.score = 0;
         this.playerHealth = 3;
     }
 
@@ -17,6 +16,7 @@ class Shooter extends Phaser.Scene {
         this.load.setPath("./assets/"); // set load path
         // player
         this.load.image("cloud", "cloud.png"); // cloud
+        this.load.image("cloudShadow", "shadow.png"); // cloud shadow
         // enemies
         this.load.image("fly", "fly_fly.png"); // fly enemy
         this.load.image("aircraft", "playerShip1_blue.png"); // aircraft enemy
@@ -31,10 +31,31 @@ class Shooter extends Phaser.Scene {
         this.load.audio("impact", "impactPunch_medium_000.ogg");
         this.load.audio("enemyFire", "impactTin_medium_001.ogg");
 
+        // bg
+        this.load.image("cloud-bg", "bgElements_spritesheet.png"); // tile sheet   
+        this.load.tilemapTiledJSON("map", "GalleryShooterBG.json"); // Load JSON of tilemap
+
     }
 
     create() {
         let my = this.my;
+
+        // generate map
+        this.map = this.add.tilemap("map", 20, 20, 50, 30);
+
+        // Add a tileset to the map
+        // First parameter: the name we gave to the tileset when it was added to Tiled
+        // Second parameter: the key for the tilesheet (from this.load.image above)
+        // https://photonstorm.github.io/phaser3-docs/Phaser.Tilemaps.Tilemap.html#addTilesetImage__anchor
+        this.tileset = this.map.addTilesetImage("bgElements_spritesheet", "cloud-bg");
+
+        // Create a tile map layer
+        // First parameter: name of the layer from Tiled
+        // https://newdocs.phaser.io/docs/3.54.0/Phaser.Tilemaps.Tilemap#createLayer
+        this.bglayer = this.map.createLayer("background", this.tileset, 0, 0);
+        this.clouds3 = this.map.createLayer("clouds3", this.tileset, 0, 0);
+        this.clouds2 = this.map.createLayer("clouds2", this.tileset, 0, 0);
+        this.clouds = this.map.createLayer("clouds", this.tileset, 0, 0);
 
         // display score
         let scoreConfig = {
@@ -64,7 +85,13 @@ class Shooter extends Phaser.Scene {
 
         // creating player sprite
         my.sprite.cloud = new Cloud(this, game.config.width/2, game.config.height - 40, "cloud", null, this.DKey, this.AKey, 5);
-        my.sprite.cloud.setScale(.4);
+        my.sprite.cloud.setDepth(1);
+        my.sprite.cloud.setScale(0.4);
+        // shadow for player
+        my.sprite.cloudShadow = this.add.sprite(my.sprite.cloud.x, my.sprite.cloud.y, "cloudShadow");
+        my.sprite.cloudShadow.setAlpha(0.2); // set shadow opacity
+        my.sprite.cloudShadow.setScale(0.43); // adjust shadow scale
+        my.sprite.cloudShadow.setDepth(0); // ensure shadow is behind the cloud
 
         // enemy sprites (flies)
         // move speed
@@ -132,7 +159,7 @@ class Shooter extends Phaser.Scene {
                     enemy.visible = false;
                     enemy.x = -100;
                     // update score
-                    this.score += enemy.pointValue;
+                    score += enemy.pointValue;
                     this.updateScore();
                     // play sound
                     this.sound.play("impact", {
@@ -202,12 +229,17 @@ class Shooter extends Phaser.Scene {
             }
         }
 
+        if (this.aircraft2.loops === 0) {
+            this.gameOver = true;
+        }
+
         if (this.gameOver === true) {
             console.log("game over: " + this.gameOver);
             this.scene.start("gameOver");
         }
 
         my.sprite.cloud.update();
+        my.sprite.cloudShadow.setPosition(my.sprite.cloud.x, my.sprite.cloud.y);
         for (let enemy of this.enemies) {
             enemy.update();
         }
@@ -221,6 +253,6 @@ class Shooter extends Phaser.Scene {
     }
 
     updateScore() {
-        this.scoreLeft.text = "Score: " + this.score;
+        this.scoreLeft.text = "Score: " + score;
     }
 }

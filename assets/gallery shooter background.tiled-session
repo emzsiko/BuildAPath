@@ -1,0 +1,27 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+    },
+    "last.imagePath": "C:/Users/eishi/OneDrive/Documents/GitHub/cmpm 120/cmpm 120 gallery shooter/assets",
+    "map.height": 30,
+    "map.lastUsedFormat": "json",
+    "map.tileHeight": 20,
+    "map.tileWidth": 20,
+    "map.width": 50,
+    "openFiles": [
+    ],
+    "project": "gallery shooter background.tiled-project",
+    "recentFiles": [
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 20,
+        "width": 20
+    }
+}
