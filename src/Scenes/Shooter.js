@@ -2,10 +2,12 @@ class Shooter extends Phaser.Scene {
 
     constructor() {
         super("galleryShooter");
-        this.my = {sprite: {}, emittedSprites: []};
+        this.my = {sprite: {}};
 
         this.my.sprite.bullet = [];
         this.maxBullets = 10;
+
+        this.my.sprite.enemyBullet = [];
 
         this.score = 0;
     }
@@ -14,14 +16,14 @@ class Shooter extends Phaser.Scene {
         this.load.setPath("./assets/"); // set load path
         // player
         this.load.image("cloud", "cloud.png"); // cloud
-        // assets
-        this.load.image("enemyFlame", "flame.png"); // enemy's bullet
-        this.load.image("lightning", "lighting_yellow.png"); // player's lightning bolt
-        this.load.image("heart", "platformPack_item017.png"); // heart icon
         // enemies
         this.load.image("fly", "fly_fly.png"); // fly enemy
         this.load.image("aircraft", "playerShip1_blue.png"); // aircraft enemy
         this.load.image("wingEnemy", "wingMan2.png"); // winged enemy
+        // assets
+        this.load.image("flame", "flame.png"); // enemy's bullet
+        this.load.image("lightning", "lighting_yellow.png"); // player's lightning bolt
+        this.load.image("heart", "platformPack_item017.png"); // heart icon
 
     }
 
@@ -63,8 +65,30 @@ class Shooter extends Phaser.Scene {
         this.fly2 = new Enemy(this, 1000, Phaser.Math.Between(50, 400), "fly", null, this.flyMoveSpeed, 10, 3000);
         this.fly3 = new Enemy(this, 1000, Phaser.Math.Between(50, 400), "fly", null, this.flyMoveSpeed, 10, 5000);
 
+        // enemy sprites (winged enemies)
+        // move speed
+        this.wingEnemyMoveSpeed = 7;
+        this.wing1 = new Enemy(this, 1000, Phaser.Math.Between(50, 400), "wingEnemy", null, this.wingEnemyMoveSpeed, 50, 21000);
+        this.wing1.setScale(0.6);
+        this.wing2 = new Enemy(this, 1000, Phaser.Math.Between(50, 400), "wingEnemy", null, this.wingEnemyMoveSpeed, 50, 24000);
+        this.wing2.setScale(0.6);
+        this.wing3 = new Enemy(this, 1000, Phaser.Math.Between(50, 400), "wingEnemy", null, this.wingEnemyMoveSpeed, 50, 27000);
+        this.wing3.setScale(0.6);
+
+        // enemy sprites (aircraft)
+        // move speed
+        this.aircraftMoveSpeed = 5;
+        this.aircraft1 = new Enemy(this, 1005, Phaser.Math.Between(50, 400), "aircraft", null, this.aircraftMoveSpeed, 100, 35000);
+        this.aircraft1.flipY = true;
+        this.aircraft2 = new Enemy(this, 1005, Phaser.Math.Between(50, 400), "aircraft", null, this.aircraftMoveSpeed, 100, 40000);
+        this.aircraft2.flipY = true;
+
+        // aircraft array
+        this.aircrafts = [this.aircraft1, this.aircraft2];
+
+
         // enemy array
-        this.enemies = [this.fly1, this.fly2, this.fly3];
+        this.enemies = [this.fly1, this.fly2, this.fly3, this.wing1, this.wing2, this.wing3, this.aircraft1, this.aircraft2];
 
         this.bulletSpeed = 6;
 
@@ -116,10 +140,34 @@ class Shooter extends Phaser.Scene {
             bullet.y -= this.bulletSpeed;
         }
 
+        // check for if aircraft enemies are active
+        for (let aircraft of this.aircrafts) {
+            if (aircraft.visible === true) {
+                // checking to see if timer has elapsed yet
+                if (!aircraft.shootTimer || this.time.now > aircraft.shootTimer) {
+                    // create bullet
+                    my.sprite.enemyBullet.push(this.add.sprite(
+                        aircraft.x, aircraft.y+(aircraft.displayHeight/2), "flame")
+                    );
+
+                    // set timer
+                    aircraft.shootTimer = this.time.now + 1000;
+                }
+            }
+        }
+
+    my.sprite.enemyBullet = my.sprite.enemyBullet.filter((bullet) => bullet.y > -(bullet.displayHeight/2));
+
+    // make all of the enemy bullets move
+    for (let bullet of my.sprite.enemyBullet) {
+        bullet.setScale(0.3);
+        bullet.y += this.bulletSpeed;
+    }
+
         my.sprite.cloud.update();
-        this.fly1.update();
-        this.fly2.update();
-        this.fly3.update();
+        for (let enemy of this.enemies) {
+            enemy.update();
+        }
     }
 
     // A center-radius AABB collision check
